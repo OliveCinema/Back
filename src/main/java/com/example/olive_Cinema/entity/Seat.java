@@ -1,5 +1,6 @@
 package com.example.olive_Cinema.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,7 +15,8 @@ public class Seat {
 
     private boolean reserved;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id")
+    @JsonBackReference
     private Movie movie;
 }
