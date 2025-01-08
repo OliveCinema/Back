@@ -15,6 +15,9 @@ public class Seat {
 
     private boolean reserved;
 
+    @Version // Optimistic Locking
+    private Integer version;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "movie_id")
     @JsonBackReference

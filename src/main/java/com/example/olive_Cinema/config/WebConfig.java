@@ -1,4 +1,4 @@
-package com.example.olive_Cinema;
+package com.example.olive_Cinema.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
