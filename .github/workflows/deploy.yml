@@ -41,7 +41,7 @@ jobs:
       # 4. Docker 이미지 빌드 및 ECR 푸시
       - name: Build and Push Docker Image
         run: |
-          IMAGE_URI=https://git-codecommit.ap-northeast-2.amazonaws.com/v1/repos/hjh-olivecinema-back:${{ env.IMAGE_TAG }}
+          IMAGE_URI=051826731133.dkr.ecr.ap-northeast-2.amazonaws.com/hjh/backend:${{ env.IMAGE_TAG }}
           docker build -t $IMAGE_URI .
           docker push $IMAGE_URI
 
@@ -54,7 +54,7 @@ jobs:
       # 6. Kubernetes 매니페스트 업데이트
       - name: Update Deployment Manifest
         run: |
-          sed -i "s|image: .*|image: https://git-codecommit.ap-northeast-2.amazonaws.com/v1/repos/hjh-olivecinema-back:${{ env.IMAGE_TAG }}|" k8s/deployment.yaml
+          sed -i "s|image: .*|image: 051826731133.dkr.ecr.ap-northeast-2.amazonaws.com/hjh/backend:${{ env.IMAGE_TAG }}|" k8s/deployment.yaml
 
       # 7. 변경사항 커밋 및 푸시
       - name: Commit and Push Changes to ArgoCD Branch
