@@ -1,14 +1,16 @@
-# Dockerfile
+# Base JRE 이미지
 FROM eclipse-temurin:23-jre-alpine as base
 WORKDIR /app
 
-# Build stage
+# Build 단계
 FROM eclipse-temurin:23-jdk-alpine as build
 WORKDIR /app
-COPY . .
-RUN ./gradlew build -x test
 
-# Package stage
+# 소스 코드 복사 및 gradlew 실행 권한 설정
+COPY . .
+RUN chmod +x gradlew && ./gradlew build -x test
+
+# Package 단계
 FROM base
 WORKDIR /app
 COPY --from=build /app/build/libs/*.jar app.jar
