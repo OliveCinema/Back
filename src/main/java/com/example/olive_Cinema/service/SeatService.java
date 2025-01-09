@@ -1,6 +1,5 @@
 package com.example.olive_Cinema.service;
 
-import com.example.olive_Cinema.dto.SeatReservationDTO;
 import com.example.olive_Cinema.entity.Seat;
 import com.example.olive_Cinema.repository.SeatRepository;
 import lombok.RequiredArgsConstructor;
