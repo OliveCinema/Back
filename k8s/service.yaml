@@ -4,7 +4,7 @@ metadata:
   name: spring-boot-service
   namespace: spring-boot
   annotations:
-    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:ap-northeast-2:051826731133:certificate/8a23d826-e647-414e-aac9-7ea06de3c5b4"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:ap-northeast-2:051826731133:certificate/0bac32f0-4110-4f4b-b857-20fb7ef96d52"
     service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
     service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
     service.beta.kubernetes.io/aws-load-balancer-type: "alb"
