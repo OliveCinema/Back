@@ -1,0 +1,53 @@
+name: Build and Push to ECR, Update Git for ArgoCD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-update:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. `master` 브랜치 체크아웃 (소스 코드 체크아웃)
+      - name: Checkout master branch
+        uses: actions/checkout@v3
+        with:
+          ref: main
+
+      # 2. 날짜와 시간 태그 생성
+      - name: Generate Date-Time Tag
+        id: date-time
+        run: |
+          echo "IMAGE_TAG=$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
+        # 결과: IMAGE_TAG=202501091230 (YYYYMMDDHHMM 형식)
+
+      # 3. Amazon ECR 로그인
+      - name: Log in to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # 4. Docker 이미지 빌드 및 ECR 푸시
+      - name: Build and Push Docker Image
+        run: |
+          IMAGE_URI=https://git-codecommit.ap-northeast-2.amazonaws.com/v1/repos/hjh-olivecinema-back:${{ env.IMAGE_TAG }}
+          docker build -t $IMAGE_URI .
+          docker push $IMAGE_URI
+
+      # 5. `argocd` 브랜치 체크아웃 (배포 매니페스트 업데이트)
+      - name: Checkout argocd branch
+        uses: actions/checkout@v3
+        with:
+          ref: argocd
+
+      # 6. Kubernetes 매니페스트 업데이트
+      - name: Update Deployment Manifest
+        run: |
+          sed -i "s|image: .*|image: https://git-codecommit.ap-northeast-2.amazonaws.com/v1/repos/hjh-olivecinema-back:${{ env.IMAGE_TAG }}|" k8s/deployment.yaml
+
+      # 7. 변경사항 커밋 및 푸시
+      - name: Commit and Push Changes to ArgoCD Branch
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "Update image tag to ${{ env.IMAGE_TAG }}"
+          branch: argocd
