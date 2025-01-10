@@ -13,9 +13,13 @@ public class WebConfig {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
-                        .allowedOrigins("http://localhost:3000") // React 프론트엔드 주소
-                        .allowedOrigins("https://hjh-olivecinema.store:3000")// cloudFront 주소
-                        .allowedMethods("GET", "POST", "PUT", "DELETE");
+                        .allowedOrigins(
+                                "http://localhost:3000",
+                                "https://hjh-olivecinema.store" // CloudFront 주소
+                        )
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                        .allowedHeaders("*") // 모든 헤더 허용
+                        .allowCredentials(true); // 쿠키 허용
             }
         };
     }
