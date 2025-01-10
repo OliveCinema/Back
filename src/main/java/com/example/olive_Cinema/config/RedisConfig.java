@@ -3,6 +3,7 @@ package com.example.olive_Cinema.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -17,6 +18,11 @@ public class RedisConfig {
         config.setHostName("clustercfg.hjh-redis.fpxtkj.apn2.cache.amazonaws.com");
         config.setPort(6379);
         config.setPassword(""); // 비밀번호가 없으면 빈 문자열, 필요한 경우 설정
+
+        // SSL 활성화
+        LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder()
+                .useSsl() // TLS 활성화
+                .build();
 
         return new LettuceConnectionFactory(config);
     }
