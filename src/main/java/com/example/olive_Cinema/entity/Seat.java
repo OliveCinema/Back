@@ -11,6 +11,7 @@ public class Seat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
     private String seatNumber;
 
     private boolean reserved;
