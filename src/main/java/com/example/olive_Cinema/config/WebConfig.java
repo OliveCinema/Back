@@ -14,6 +14,7 @@ public class WebConfig {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedOrigins("http://localhost:3000") // React 프론트엔드 주소
+                        .allowedOrigins("https://hjh-olivecinema.store:3000")// cloudFront 주소
                         .allowedMethods("GET", "POST", "PUT", "DELETE");
             }
         };
