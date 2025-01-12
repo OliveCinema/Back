@@ -29,7 +29,7 @@ common: &default_settings
   # app_name: My Application;My Application 2
   # This setting is required. Up to 3 different application names can be specified.
   # The first application name must be unique.
-  app_name: ''
+  app_name: 'olivecinema-back'
 
   # To enable high security, set this property to true. When in high
   # security mode, the agent will use SSL and obfuscated SQL. Additionally,
@@ -386,15 +386,15 @@ common: &default_settings
 
 development:
   <<: *default_settings
-  app_name: ' (Development)'
+  app_name: 'olivecinema-back (Development)'
 
 test:
   <<: *default_settings
-  app_name: ' (Test)'
+  app_name: 'olivecinema-back (Test)'
 
 production:
   <<: *default_settings
 
 staging:
   <<: *default_settings
-  app_name: ' (Staging)'
+  app_name: 'olivecinema-back (Staging)'
