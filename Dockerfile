@@ -14,4 +14,5 @@ RUN chmod +x gradlew && ./gradlew build -x test
 FROM base
 WORKDIR /app
 COPY --from=build /app/build/libs/*.jar app.jar
-ENTRYPOINT ["java", "-javaagent:/full/path/to/newrelic.jar", "-jar", "app.jar"]
+COPY newrelic/newrelic.jar /app/newrelic.jar
+ENTRYPOINT ["java", "-javaagent:/app/newrelic.jar", "-jar", "app.jar"]
