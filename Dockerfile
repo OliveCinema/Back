@@ -6,12 +6,24 @@ WORKDIR /app
 FROM eclipse-temurin:23-jdk-alpine as build
 WORKDIR /app
 
-# 소스 코드 복사 및 gradlew 실행 권한 설정
+# New Relic 에이전트 다운로드 및 압축 해제
+RUN mkdir -p /app/newrelic && \
+    wget -O /app/newrelic/newrelic-java.zip https://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/newrelic-java.zip && \
+    unzip /app/newrelic/newrelic-java.zip -d /app/newrelic && \
+    rm /app/newrelic/newrelic-java.zip
+
+# 소스 코드 복사 및 빌드
 COPY . .
 RUN chmod +x gradlew && ./gradlew build -x test
 
 # Package 단계
 FROM base
 WORKDIR /app
+
+# 애플리케이션 및 New Relic 파일 복사
 COPY --from=build /app/build/libs/*.jar app.jar
-ENTRYPOINT ["java", "-jar", "app.jar"]
+COPY --from=build /app/newrelic/newrelic.jar /app/newrelic.jar
+COPY --from=build /app/newrelic/newrelic.yml /app/newrelic.yml
+
+# 애플리케이션 실행 (New Relic 에이전트 포함)
+ENTRYPOINT ["java", "-javaagent:/app/newrelic.jar", "-jar", "app.jar"]
