@@ -8,9 +8,12 @@ WORKDIR /app
 
 # New Relic 에이전트 다운로드 및 압축 해제
 RUN mkdir -p /app/newrelic && \
-    wget -O /app/newrelic/newrelic-java.zip https://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/newrelic-java.zip && \
+    wget -q -O /app/newrelic/newrelic-java.zip https://download.newrelic.com/newrelic/java-agent/newrelic-agent/current/newrelic-java.zip && \
     unzip /app/newrelic/newrelic-java.zip -d /app/newrelic && \
     rm /app/newrelic/newrelic-java.zip
+
+# New Relic 파일 확인
+RUN if [ ! -f /app/newrelic/newrelic.jar ]; then echo "New Relic jar not found!" && exit 1; fi
 
 # 소스 코드 복사 및 빌드
 COPY . .
