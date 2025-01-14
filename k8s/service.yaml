@@ -1,23 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: spring-boot-service
+  name: back-clusterIP
   namespace: spring-boot
-  annotations:
-    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:ap-northeast-2:051826731133:certificate/0bac32f0-4110-4f4b-b857-20fb7ef96d52"
-    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "http"
-    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
-    service.beta.kubernetes.io/aws-load-balancer-type: "alb"
 spec:
-  type: LoadBalancer
-  ports:
-    - name: http
-      protocol: TCP
-      port: 80
-      targetPort: 8080
-    - name: https
-      protocol: TCP
-      port: 443
-      targetPort: 8080
   selector:
     app: spring-boot-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
