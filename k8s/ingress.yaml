@@ -19,7 +19,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: back-clusterIP
+                name: back-clusterip
                 port:
                   number: 80
 #
