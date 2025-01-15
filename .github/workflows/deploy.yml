@@ -44,6 +44,7 @@ jobs:
           IMAGE_URI=051826731133.dkr.ecr.ap-northeast-2.amazonaws.com/hjh/backend:${{ env.IMAGE_TAG }}
           docker build -t $IMAGE_URI .
           docker push $IMAGE_URI
+          docker build -t 051826731133.dkr.ecr.ap-northeast-2.amazonaws.com/hjh/backend:lastest .
           docker push 051826731133.dkr.ecr.ap-northeast-2.amazonaws.com/hjh/backend:latest
           
 
