@@ -23,5 +23,5 @@ spec:
               cpu: 500m
               memory: 512i
             limits:
-              cpu: 1vCPU
+              cpu: "1"
               memory: 1Gi
