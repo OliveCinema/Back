@@ -44,6 +44,7 @@ jobs:
           IMAGE_URI=051826731133.dkr.ecr.ap-northeast-2.amazonaws.com/hjh/backend:${{ env.IMAGE_TAG }}
           docker build -t $IMAGE_URI .
           docker push $IMAGE_URI
+          docker push docker push 051826731133.dkr.ecr.ap-southeast-1.amazonaws.com/spring-boot/dr-img:latest
 
       # 5. `argocd` 브랜치 체크아웃 (배포 매니페스트 업데이트)
       - name: Checkout argocd branch
