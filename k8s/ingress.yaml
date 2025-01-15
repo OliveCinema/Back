@@ -8,7 +8,7 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
-    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:ap-northeast-2:051826731133:certificate/6c7ef852-bafe-41a8-9b53-ee95c508aedd"
+    alb.ingress.kubernetes.io/certificate-arn: "arn:aws:acm:ap-northeast-2:051826731133:certificate/0bac32f0-4110-4f4b-b857-20fb7ef96d52"
     alb.ingress.kubernetes.io/healthcheck-path: "/"
 spec:
   rules:
