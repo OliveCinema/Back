@@ -35,7 +35,7 @@ jobs:
           # 소나큐브 분석 실행
           sonar-scanner \
             -Dsonar.projectKey=backend \
-            -Dsonar.host.url=http://54.180.236.23/:9000
+            -Dsonar.host.url=http://54.180.236.23:9000
             -Dsonar.sources=. \
             -Dsonar.host.url=http://54.180.236.23:9000 \
             -Dsonar.token=$SONAR_TOKEN \
