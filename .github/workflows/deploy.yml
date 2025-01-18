@@ -36,8 +36,6 @@ jobs:
           sonar-scanner \
             -Dsonar.projectKey=olivecinema_back \
             -Dsonar.host.url=http://54.180.236.23:9000 \
-            -Dsonar.sources=. \
-            -Dsonar.host.url=http://54.180.236.23:9000 \
             -Dsonar.token=$SONAR_TOKEN \
             -Dsonar.sources=. \
             -Dsonar.java.binaries=build/classes/java/main \   
