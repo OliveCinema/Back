@@ -22,10 +22,6 @@ jobs:
         run: |
           echo "IMAGE_TAG=$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
 
-      # 3-0. 소나큐브 분석전에 빌드
-      - name: Build Project
-        run: ./gradlew build
-
       # 3. 소나큐브 분석
       - name: SonarQube Scan
         env:
@@ -41,8 +37,8 @@ jobs:
             -Dsonar.projectKey=olivecinema_back \
             -Dsonar.host.url=http://54.180.236.23:9000 \
             -Dsonar.token=$SONAR_TOKEN \
-            -Dsonar.sources=. \
-            -Dsonar.java.binaries=build/classes/java/main \
+            -Dsonar.sources=src/main/java \
+            -Dsonar.java.binaries=
 
       # 4. AWS 자격증명 설정
       - name: Configure AWS Credentials
