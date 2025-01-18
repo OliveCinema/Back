@@ -14,7 +14,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
         with:
-          ref: main
+          fetch-depth: 0 # Shallow clone 비활성화
 
       # 2. 날짜와 시간 태그 생성
       - name: Generate Date-Time Tag
@@ -24,21 +24,15 @@ jobs:
 
       # 3. 소나큐브 분석
       - name: SonarQube Scan
+        uses: sonarsource/sonarcloud-github-action@v1.10
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # 소나큐브 토큰
-        run: |
-          # SonarScanner 설치
-          curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
-          unzip sonar-scanner.zip -d $HOME/sonar-scanner
-          export PATH="$HOME/sonar-scanner/sonar-scanner-5.0.1.3006-linux/bin:$PATH"
-          
-          # 소나큐브 분석 실행
-          sonar-scanner \
-            -Dsonar.projectKey=backend \
-            -Dsonar.sources=. \
-            -Dsonar.host.url=http://54.180.236.23:9000 \
-            -Dsonar.token=$SONAR_TOKEN \
-            -Dsonar.sources=. \
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=backend
+            -Dsonar.host.url=http://54.180.236.23:9000
+            -Dsonar.token=$SONAR_TOKEN
+            -Dsonar.sources=.
             -Dsonar.exclusions=**/*.java
             -X
 
