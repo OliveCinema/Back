@@ -1,4 +1,4 @@
-name: Build and Push to ECR, Update Git for ArgoCD
+name: Build, Push to ECR, and SonarQube Analysis
 
 on:
   push:
@@ -6,12 +6,12 @@ on:
       - main
 
 jobs:
-  build-and-update:
+  build-and-analyze:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. `master` 브랜치 체크아웃 (소스 코드 체크아웃)
-      - name: Checkout master branch
+      # 1. 소스 코드 체크아웃
+      - name: Checkout Code
         uses: actions/checkout@v3
         with:
           ref: main
@@ -21,9 +21,25 @@ jobs:
         id: date-time
         run: |
           echo "IMAGE_TAG=$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
-        # 결과: IMAGE_TAG=202501091230 (YYYYMMDDHHMM 형식)
 
-      # 3. Amazon ECR 자격증명 및 로그인
+      # 3. 소나큐브 분석
+      - name: SonarQube Scan
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # 소나큐브 토큰
+        run: |
+          # SonarScanner 설치
+          curl -sSLo sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+          unzip sonar-scanner.zip -d $HOME/sonar-scanner
+          export PATH="$HOME/sonar-scanner/sonar-scanner-5.0.1.3006-linux/bin:$PATH"
+          
+          # 소나큐브 분석 실행
+          sonar-scanner \
+            -Dsonar.projectKey=backend \
+            -Dsonar.sources=. \
+            -Dsonar.host.url=http://54.180.236.23:9000 \
+            -Dsonar.login=$SONAR_TOKEN
+
+      # 4. AWS 자격증명 설정
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -31,34 +47,29 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
+      # 5. Amazon ECR 로그인
       - name: Log in to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
-        env:
-          AWS_REGION: ap-northeast-2 # 사용할 리전
-        with:
-          registry-type: private
 
-      # 4. Docker 이미지 빌드 및 ECR 푸시
+      # 6. Docker 이미지 빌드 및 푸시
       - name: Build and Push Docker Image
         run: |
           IMAGE_URI=051826731133.dkr.ecr.ap-northeast-2.amazonaws.com/hjh/backend:${{ env.IMAGE_TAG }}
           docker build -t $IMAGE_URI .
           docker push $IMAGE_URI
 
-          
-
-      # 5. `argocd` 브랜치 체크아웃 (배포 매니페스트 업데이트)
-      - name: Checkout argocd branch
+      # 7. ArgoCD 브랜치로 전환
+      - name: Checkout ArgoCD Branch
         uses: actions/checkout@v3
         with:
           ref: argocd
 
-      # 6. Kubernetes 매니페스트 업데이트
+      # 8. Kubernetes 매니페스트 업데이트
       - name: Update Deployment Manifest
         run: |
           sed -i "s|image: .*|image: 051826731133.dkr.ecr.ap-northeast-2.amazonaws.com/hjh/backend:${{ env.IMAGE_TAG }}|" k8s/deployment.yaml
 
-      # 7. 변경사항 커밋 및 푸시
+      # 9. 변경사항 커밋 및 푸시
       - name: Commit and Push Changes to ArgoCD Branch
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
