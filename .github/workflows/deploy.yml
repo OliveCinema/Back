@@ -38,7 +38,7 @@ jobs:
             -Dsonar.sources=. \
             -Dsonar.host.url=http://54.180.236.23:9000 \
             -Dsonar.login=$SONAR_TOKEN
-            -Dsonar.java.binaries=build/classes/java/main
+            -Dsonar.exclusions=**/*.java
 
       # 4. AWS 자격증명 설정
       - name: Configure AWS Credentials
