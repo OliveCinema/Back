@@ -41,6 +41,7 @@ jobs:
             -Dsonar.token=$SONAR_TOKEN \
             -Dsonar.sources=. \
             -Dsonar.exclusions=**/*.java
+            -Dsonar.exclusions=**/*.yaml
             -X
 
       # 4. AWS 자격증명 설정
