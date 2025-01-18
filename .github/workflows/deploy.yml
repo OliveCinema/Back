@@ -22,22 +22,7 @@ jobs:
         run: |
           echo "IMAGE_TAG=$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
 
-      # 3. Java 20 설치 및 설정 (JDK 20은 Language Version 23에 해당)
-      - name: Set up JDK 20
-        uses: actions/setup-java@v3
-        with:
-          java-version: '20'
-          distribution: 'temurin'
-
-      # 4. Gradle Wrapper 실행 권한 부여
-      - name: Grant Execute Permission for Gradle Wrapper
-        run: chmod +x ./gradlew
-
-      # 5. Gradle 빌드
-      - name: Build Project
-        run: ./gradlew build
-
-      # 6. 소나큐브 분석
+      # 3. 소나큐브 분석
       - name: SonarQube Scan
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} # 소나큐브 토큰
@@ -52,10 +37,10 @@ jobs:
             -Dsonar.projectKey=olivecinema_back \
             -Dsonar.host.url=http://54.180.236.23:9000 \
             -Dsonar.token=$SONAR_TOKEN \
-            -Dsonar.sources=src/main/java \
-            -Dsonar.java.binaries=build/classes/java/main
+            -Dsonar.sources=. \
+            -Dsonar.java.binaries=build/classes/java/main \
 
-      # 7. AWS 자격증명 설정
+      # 4. AWS 자격증명 설정
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -63,29 +48,29 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-northeast-2
 
-      # 8. Amazon ECR 로그인
+      # 5. Amazon ECR 로그인
       - name: Log in to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      # 9. Docker 이미지 빌드 및 푸시
+      # 6. Docker 이미지 빌드 및 푸시
       - name: Build and Push Docker Image
         run: |
           IMAGE_URI=051826731133.dkr.ecr.ap-northeast-2.amazonaws.com/hjh/backend:${{ env.IMAGE_TAG }}
           docker build -t $IMAGE_URI .
           docker push $IMAGE_URI
 
-      # 10. ArgoCD 브랜치로 전환
+      # 7. ArgoCD 브랜치로 전환
       - name: Checkout ArgoCD Branch
         uses: actions/checkout@v3
         with:
           ref: argocd
 
-      # 11. Kubernetes 매니페스트 업데이트
+      # 8. Kubernetes 매니페스트 업데이트
       - name: Update Deployment Manifest
         run: |
           sed -i "s|image: .*|image: 051826731133.dkr.ecr.ap-northeast-2.amazonaws.com/hjh/backend:${{ env.IMAGE_TAG }}|" k8s/deployment.yaml
 
-      # 12. 변경사항 커밋 및 푸시
+      # 9. 변경사항 커밋 및 푸시
       - name: Commit and Push Changes to ArgoCD Branch
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
