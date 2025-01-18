@@ -34,7 +34,7 @@ jobs:
           
           # 소나큐브 분석 실행
           sonar-scanner \
-            -Dsonar.projectKey=backend \
+            -Dsonar.projectKey=olivecinema_back \
             -Dsonar.host.url=http://54.180.236.23:9000
             -Dsonar.sources=. \
             -Dsonar.host.url=http://54.180.236.23:9000 \
