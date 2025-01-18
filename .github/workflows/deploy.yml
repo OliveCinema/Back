@@ -37,7 +37,8 @@ jobs:
             -Dsonar.projectKey=backend \
             -Dsonar.sources=. \
             -Dsonar.host.url=http://54.180.236.23:9000 \
-            -Dsonar.login=$SONAR_TOKEN
+            -Dsonar.token=$SONAR_TOKEN \
+            -Dsonar.sources=. \
             -Dsonar.exclusions=**/*.java
             -X
 
