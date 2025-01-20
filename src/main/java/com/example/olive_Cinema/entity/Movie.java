@@ -14,7 +14,7 @@ public class Movie {
     private Long id;
 
     private String title;
-
+    @Column(name = "posterUrl")
     private String posterUrl;
 
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
