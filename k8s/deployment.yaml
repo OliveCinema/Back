@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: spring-boot-app
-          image: https://git-codecommit.ap-northeast-2.amazonaws.com/v1/repos/hjh-olivecinema-back:latest # 이 부분은 Actions에서 업데이트
+          image: 051826731133.dkr.ecr.ap-northeast-2.amazonaws.com/hjh/backend:202501200210
           ports:
             - containerPort: 8080
           resources:
