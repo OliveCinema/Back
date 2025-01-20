@@ -15,6 +15,8 @@ public class Movie {
 
     private String title;
 
+    private String posterUrl;
+
     @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<Seat> seats;

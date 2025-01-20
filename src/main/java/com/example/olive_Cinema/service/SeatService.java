@@ -15,6 +15,7 @@ public class SeatService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final SeatRepository seatRepository;
 
+
     private static final String SEAT_LOCK_PREFIX = "seat:lock:";
 
     public boolean tryReserveSeat(Long seatId) {
